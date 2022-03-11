@@ -764,17 +764,151 @@ window.addEventListener("offline", handleWindowOffline);
 window.addEventListener("online", handleWindowOnline);
 ```
 
-## 3.6
+## 3.6 (function에 if,else 사용하기)
 
+**if/else**
 
+```js
+const title = document.querySelector("div.hey h1:first-child");
+function handleTitleClick() {
+  if (title.style.color === "blue") {
+    title.style.color = "tomato";
+  } else {
+    title.style.color = "blue";
+  }
+}
 
+title.addEventListener("click", handleTitleClick);
+```
 
+- if 가 true면 tomato가되고 false면 blue가된다
 
+**currentColor_ const/let 으로 정리하기**
 
+```js
+const title = document.querySelector("div.hey h1:first-child");
+function handleTitleClick() {
+  const currentColor = title.style.color;
+  let newColor;
+  if (currentColor === "blue") {
+    newColor = "tomato";
+  } else {
+    newColor = "blue";
+  }
+ 
+  title.style.color = newColor;
+}
 
+title.addEventListener("click", handleTitleClick);
+```
 
+-  currentColor는 getter로써, 최근 color값을 복사하는 역할을 합니다.
 
+- newColor는 변수가 없다 또  let이 앞에오기때문에 값이 변해도 상관없다
+  - 처음에 newColor라는 빈 let변수를 선언했고 if, else를 거치면서 초기화 값을 할당받게 된다
+    즉, newColor = "tomato"; 이런식으로 되는거다
+    그리고 그 값을 title 에 넣어주는 것이기 때문에 title.style.color = newColor;가 된다
+  - newColor에 새롭게 넣어준 데이터를 h1.style.color에 넣어 줌으로써 색상이 반응하도록 되어있다
 
+- 프로그래밍언어에서 `= (equal)` 표시는 오른쪽에 있는 값을 왼쪽에 대입한다는 뜻입니다. 
+  -   `title.style.color = newColor` 에서 newColor변수에 대입된 색상값을 title.style.color에 최종적으로 할당하는 역할을 합니다
+
+## 3.7 (css활용하기)
+
+**css를 js에서 활용하기**
+
+```css
+.active {
+  color: tomato;
+  transition: color 0.5s ease-in;
+}
+```
+
+- css에서 .active 라는 클래스명을 부여해서 컬러 변경하기
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+function handleTitleClick() {
+  if (title.className === "active") {
+    title.className = "";
+  } else {
+    title.className = "active";
+  }
+}
+
+title.addEventListener("click", handleTitleClick);
+```
+
+- css에서 class를 가져와서 js에서 활용하기
+- === 일치하는지 여부판단    /           = 오른쪽 값을 왼쪽으로 대입한다는 뜻
+
+**1. js를 const로 정리하기**
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+function handleTitleClick() {
+  const clickedClass = "active";
+  if (title.className === clickedClass) {
+    title.className = "";
+  } else {
+    title.className = clickedClass;
+  }
+}
+
+title.addEventListener("click", handleTitleClick);
+```
+
+- 계속 css여러번 넣을  필요없이  css에서 여기에"   "들어갈 css만 복사 붙여 넣기만 해주면된다 
+-  const clickedClass = "  css  " ;
+
+## 3.8 (toggle)
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+
+function handleTitleClick() {
+  const clickedClass = "active";
+  if (title.classList.contains(clickedClass)) {
+    title.classList.remove(clickedClass);
+  } else {
+    title.classList.add(clickedClass);
+  }
+}
+title.addEventListener("click", handleTitleClick);
+```
+
+- classList를 이용하는건= element의 class내용물을 조작하는 것을 허용한다는 뜻
+
+- title.classList.contains(clickedClass) 
+
+  =우리가 명시한 class가 HTML element의 class에 포함되어 있는지 말해준다
+
+- title.classList.remove(clickedClass)
+
+  = remove라는 function은 명시한 class name을 제거하고
+
+- title.classList.add(clickedClass)
+
+  =add라는 function은 명시한 class name을 추가
+
+**toggle**
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+
+function handleTitleClick() {
+  title.classList.toggle("active");
+}
+title.addEventListener("click", handleTitleClick);
+```
+
+- active는 반복되지않기때문에 const를 할필요없이 바로 " "여기에 넣어주면된다
+
+- 기본적으로 위에 코드를 간단하게 구현한다
+
+- toggle는 titel의 classList에  active class가 포함되었다면 제거하고 포함되지않았다면 추가한다
+
+classList : https://developer.mozilla.org/ko/docs/Web/API/Element/classList
 
 
 
