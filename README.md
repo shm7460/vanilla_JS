@@ -1,3 +1,5 @@
+
+
 # js
 
 - three.js 는 자바스크립트로 3D를 구현해주는 라이브러리이다
@@ -113,7 +115,7 @@ console.log("your new name is " + myName);
   - myName = "shm";
 -  또 값을 업데이트하고 싶다면 업데이트를 하고 변경될 내용을 console.log으로 작성해주면된다
 
-## 2.4 (boolean_**true/false/**null/undefined)
+## 2.4 (boolean_true/false/null/undefined)
 
 **true / false**
 
@@ -174,7 +176,7 @@ const daysOfWeek = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 console.log(daysOfWeek);
 ```
 
-**arry(배열)안의 데이터에 접근 하는 법 **
+**array(배열)안의 데이터에 접근 하는 법** 
 
 ```js
 const daysOfWeek = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
@@ -298,6 +300,10 @@ const player = {
 console.log(player.name);
 player.sayHello("shm");
 player.sayHello("min");
+----------결과------------
+hyemin
+hello shm
+hello min
 ```
 
 `console.log(player.name);` `player.sayHello();`
@@ -328,9 +334,455 @@ carculator.multi(2, 2);
 carculator.square(55, 2);
 ```
 
-## 2.11
+## 2.11(returns)
 
-console.lg 은 console에 무언가를 log 하는 것이다 
+```js
+const age = 97;
+function calculateKrAge(ageOfForeigner) {
+  return ageOfForeigner + 2;
+}
+const krAge = calculateKrAge(age);
+console.log(krAge);
+-------결과-----------
+99
+```
+
+```js
+const age = 97;
+function calculateKrAge(ageOfForeigner) {
+  ageOfForeigner + 2;
+  return "hello";
+}
+const krAge = calculateKrAge(age);
+console.log(krAge);
+------결과---------
+hello
+```
+
+- variable이름이 'krAge'의 값 자체가 function의 return value(반환값)이다
+
+**상호의존적인 예시**
+
+```js
+const calcultor = {
+  plus: function (a, b) {
+    return a + b;
+  },
+  minus: function (a, b) {
+    return a - b;
+  },
+  div: function (a, b) {
+    return a / b;
+  },
+};
+
+const pluseResult = calcultor.plus(2, 3);
+const minusResult = calcultor.minus(pluseResult, 10);
+const divResult = calcultor.div(10, minusResult);
+console.log(pluseResult);
+console.log(minusResult);
+console.log(divResult);
+```
+
+- pluseResult, , 으로 바로 값을 알수있다
+-  return을 하는 순간 그뒤에오는 것은 실행이 안된다  (function의 기능은 끝난다 )
+
+## 2.13 (condition)
+
+ **prompt(    )**
+
+```js
+const age = prompt("How old are you?");
+console.log(typeof age, parseInt(age));
+```
+
+- `prompt()`은 사용자에게 창을 띄울수 있게 해줌
+-  ` typeof`를 사용하면 값이 무슨타입인지 알수있다
+- `parseInt("age")`는 age에 적는 것들은 숫자로 바꿔준다 (문자열을 숫자로 바꿔주는 역할을함)
+  - 123 입력하면 123숫자로 인식하고 lalalal글자이면 NaN이라고 보여준다 
+- `NaN` 뜻은 숫자가 아님 이라는 뜻이다
+
+**두개의 function을 사용하기**
+
+```js
+const age = parseInt(prompt("How old are you?"));
+console.log(age);
+```
+
+console에서 숫자면 그대로 숫자가 표시되고, 숫자가아닌것은 NaN으로 표시가 된다 
+
+## 2.14 (NaN)
+
+**isNAN(  )**
+
+```js
+const age = parseInt(prompt("How old are you?"));
+console.log(isNaN(age));
+```
+
+- `isNaN ` function은 boolean으로 알려준다 (그말은 true or false로 알려준다는 뜻)
+
+- isNaN는 숫자가아니다 라는 뜻이기 때문에 숫자이면 false 라고 알려주고, 슷자가아니면 true라고 알려준다
+
+**if**
+
+```js
+const age = parseInt(prompt("How old are you?"));
+if (isNaN(age)) {
+  console.log("please write a number");
+} else {
+  console.log("Thank you for writing your age");
+}
+```
+
+- if (boolean만 올수있다 true or flase){ true이면 보여줄 코드를 입력한다 }
+
+- 숫자가 아니면 please write a number 이문자열이 보여진다
+- if 가 true라면 조건문이 실행되고 else가 false면 조건문이 실행된다
+
+## 2.15 (else if / &&)
+
+**else if  는 if 가 false일때 조건문을 실행시켜준다**
+
+```js
+const age = parseInt(prompt("How old are you?"));
+
+if (isNaN(age)) {
+  console.log("please write a number");
+} else if (age < 18) {
+  console.log("you are too young");
+} else {
+  console.log("you can drink");
+}
+```
+
+- if 에서 age 가 number이면 else if 으로 넘어온다 (if가 false이기 때문이다)
+- else if는 age가 18세미만이라면  실행시킨다 (else if 가 ture라서 )
+- else if가 false면 else를 실행 시킨다 (else는 위에 하나라도 true면 실행이 안된다 )
+  - 현재 조건문이 flase면 다른 조건문을고 넘어간다
+  - if (  ) / else if (  ) : 괄호안은 condition(조건문)이라고 한다, 조건문이 없는거는 else처럼 차례가오면 바로실행 한다 
+
+**두가지이상 조건문 일때( &&)**
+
+```js
+const age = parseInt(prompt("How old are you?"));
+
+if (isNaN(age)) {
+  console.log("please write a number");
+} else if (age < 18) {
+  console.log("you are too young");
+} else if (age >= 18 && age <= 50) {
+  console.log("you can drink");
+} else if (age > 50 && age <= 80) {
+  console.log("you should exercise");
+} else if (age > 80) {
+  console.log("you can do whatever you want");
+}
+```
+
+- &&(and) / >=, <=(이상,이하) / >,<(초과,미만)
+- 두가지 이상 조건문을 둘다 true가 되야 true가된다 하나라도 false가 있는면 false가 된다
+- else는 꼭 사용해야되는건 아니다
+
+**두가지이상 조건문 일때(||)**
+
+```js
+const age = parseInt(prompt("How old are you?"));
+
+if (isNaN(age) || age < 0) {
+  console.log("please write a real positive number");
+} else if (age < 18) {
+  console.log("you are too young");
+} else if (age >= 18 && age <= 50) {
+  console.log("you can drink");
+} else if (age > 50 && age <= 80) {
+  console.log("you should exercise");
+} else if (age > 80) {
+  console.log("you can do whatever you want");
+}
+```
+
+- if 조건문에서 숫자가 아니거나, 음수인 경우 하나라도 true이면 ]
+
+  "please write a real positive number" 가 실행이된다 
+
+- || (or)는 하나라도 true면 true가된다 또 하나라도 false면 false가된다
+
+```js
+true || true == true
+false || false == false
+true || false == true
+false || true == true
+```
+
+## 2.16 (===)
+
+**같음을 확인하는 방법(===)**
+
+```js
+const age = parseInt(prompt("How old are you?"));
+
+if (isNaN(age) || age < 0) {
+  console.log("please write a real positive number");
+} else if (age < 18) {
+  console.log("you are too young");
+} else if (age >= 18 && age <= 50) {
+  console.log("you can drink");
+} else if (age > 50 && age <= 80) {
+  console.log("you should exercise");
+} else if (age === 100) {
+  console.log("wow you are wise");
+} else if (age > 80) {
+  console.log("you can do whatever you want");
+}
+```
+
+- age === 100 위치를 맨마지막 조건문으로 작성하면 실행이안된다 (위치에 맞게 넣는것이 중요 )
+- 아닌지를 확인하는 방법 (!==)
+
+## 3.1 (자바에서 html요소 변경하는 방법)
+
+**document.getElementById()** 
+
+```html
+document.getElementById("grab");
+-----결과-------------------------
+ <h1 id="grab">Grab me!</h1>
+```
+
+-  객체(object) 중 document라는 객체는 JS에서 HTML파일을 불러올 수 있도록 도와준다.
+
+- document라는 객체 안에 getElementById 라는 함수가 있는데 이 함수의 기능은 
+
+  해당 HTML의 고유 ID를 추적하여 JS가 해당 ID를 가진 HTML 파일을 보완 수정할 수 있도록 해준다.
+
+- string을 전달받는 함수이다
+
+- getElementById("grab") 에서 "grab"는 Id이다
+
+**h1 태그의 id가 grab인것을 자바에서 title로 정의하는법**
+
+```js
+const title = document.getElementById("grab");
+console.log(title.id);
+```
+
+- h1태그 id를 title로 정의한다는뜻
+- 자바에서 title로 정의한 곳의 id 확인하기
+
+**console.dir( )는 element를 더 자세히 보여준다**
+
+```js
+const title = document.getElementById("grab");
+console.dir(title);
+------결과--------------
+h1#grab
+```
+
+- js에서는 html이 표현하는 object를 보여준다
+
+**title의 내용을 변경함**
+
+```js
+document.title = "Hello From JS!";
+```
+
+-  웹사이트의 title이 바꾸는 방법
+
+**id 가 grab인곳에 내용 변경하기**
+
+```js
+const title = document.getElementById("grab");
+title.innerText = "Got you";
+```
+
+- document의 함수 중에는 getElementById 라는 함수가 있는데, 이 함수가 HTML에서 id를 통해 element를 찾아준다.
+- element를 찾고 나면, JS로 해당 HTML의 무엇이든 바꿀 수 있다.
+
+- id, className 등을 가져 올 수 있음. (cosole.log(title.id);)
+
+## 3.2 (자바에서 html요소 가져오는 방법)
+
+**getElementsByClassName** (classname 가져오는 방법)
+
+```js
+const title = document.getElementsByClassName("hey");
+console.log(title);
+```
+
+- 해당되는 모든 array를 가져다준다 
+
+**getElementsByTagName** (tag 가져오는 방법)
+
+```js
+const title = document.getElementsByTagName("h1");
+console.log(title);
+```
+
+- 해당되는 모든 array를 가져다준다 
+
+**querySelector **(element를 css방식으로 검색하기)
+
+```js
+const title = document.querySelector(".hey h1");
+console.log(title);
+
+const title = document.querySelector(".hey:nth-child(2) h1");
+console.log(title);
+```
+
+- class 내부에 있는 h1을 가져올수있다 (자주사용하게됨)
+- querySelector는 오직 첫번째 element만 return함 (첫번째 h1 한개만 가져온다는 뜻)
+- `id도 이걸로 찾을수있다 ("#hey")`
+
+**querySelectorAll** (조건에 부합하는 모든 요소를 가져다줌)
+
+```js
+const title = document.querySelectorAll(".hey h1");
+console.log(title);
+----결과--------
+NodeList(4) [h1, h1, h1, h1]
+```
+
+- 이조건에 부합하는 모든 element를 가져다 준다
+- h1이 들어있는 array를 다 가져다준다 
+- 해당되는 모든 array를 가져다준다 
+
+## 3.3 (addEventListener)
+
+javascript로 style을 변경하기
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+console.dir(title);
+title.style.color = "blue";
+```
+
+addEventListener
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+function handleTitleClick() {
+  console.log("title was clicked!");
+}
+title.addEventListener("click", handleTitleClick);
+```
+
+- addEventListener 하기위해서는  먼저 function을 정의해줘야한다
+- function에게 이름을 지정해주고 나타날 것을 console.log에 작성해준다
+- addEventListener에서는 `click` 이라는 이벤트 명령어를넣어주면 클릭하는 순간function의  "handleTitleClick"가 실행된다
+- title.addEventListener("click",handleTitleClick) 여기서 handleTitleClick에 ()을 붙여주지 않는게 중요
+  -  ()가 있으면 브라우저가 '아~ 함수 실행하라는거구나~' 하고 유저의 클릭여부와 관계없이 실행함
+
+클릭하는 순간 색변경하기
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+function handleTitleClick() {
+  title.style.color = "blue";
+}
+title.addEventListener("click", handleTitleClick);
+```
+
+-  element의 내부를 보고 싶으면 console.dir()
+  - 기본적으로 object로 표시한 element를 보여줌(전부 js object임) 
+  - 그 element 중 앞에 on이 붙은 것들은 event임
+
+## 3.4 (event종류)
+
+event 종류 click/ mouseenter /mouseleave
+
+```js
+const title = document.querySelector("div.hey h1:first-child");
+function handleTitleClick() {
+  title.style.color = "blue";
+  title.innerText = "Hello!";
+}
+function handleMouseEnter() {
+  title.style.color = "green";
+  title.innerText = "Mouse is here!";
+}
+function handleMouseleave() {
+  title.style.color = "tomato";
+  title.innerText = "Welcome";
+}
+title.addEventListener("click", handleTitleClick);
+title.addEventListener("mouseenter", handleMouseEnter);
+title.addEventListener("mouseleave", handleMouseleave);
+```
+
+- click은 클릭하면  function handleTitleClick을실행함
+- mouseenter는 마우스를 위에 올리면 function handleMouseEnter을 실행함
+- mouseleave는 마우스를 떼면 function handleMouseleave을 실행함
+
+## 3.5(event하는데 또다른 방법)
+
+```js
+title.addEventListener("click", handleTitleClick);
+title.addEventListener("mouseenter", handleMouseEnter);
+title.addEventListener("mouseleave", handleMouseleave);
+---------------event하는데 두가징방법임 둘다 같은 뜻임-----------------------
+title.onclick = handleTitleClick;
+title.onmouseenter = handleMouseEnter;
+title.onmouseleave = handleMouseleave;
+```
+
+- 위에 두 코드는 동일하나 addEventListener를 더 선호하는 이유는
+  removeEventListener을 통해서 event listener을 제거할수있기 때문이다
+
+**resize**
+
+```js
+function handleWindowResize() {
+  document.body.style.backgroundColor = "orange";
+}
+window.addEventListener("resize", handleWindowResize);
+```
+
+- widow는 기본적으로 제공되는 요소다
+
+- document의 body,head,title 는 document뒤로 바로 불러올수있다(h1,div등등은 안된다)
+- div나 h1 등 element 들은 querySelector getElementById등으로 찾아야한다.
+  ex) document.querySelector(“h1”);
+- window의 사이즈가 변하면 배경색이 바뀐다
+
+**copy/ offline/ online**
+
+```js
+function handleWindowCopy() {
+  alert("copier!");
+}
+function handleWindowOffline() {
+  alert("SOS no WIFI");
+}
+function handleWindowOnline() {
+  alert("ALL GOOD");
+}
+window.addEventListener("resize", handleWindowResize);
+window.addEventListener("copy", handleWindowCopy);
+window.addEventListener("offline", handleWindowOffline);
+window.addEventListener("online", handleWindowOnline);
+```
+
+## 3.6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
