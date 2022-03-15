@@ -1,5 +1,3 @@
-
-
 # js
 
 - three.js 는 자바스크립트로 3D를 구현해주는 라이브러리이다
@@ -861,7 +859,7 @@ title.addEventListener("click", handleTitleClick);
 - 계속 css여러번 넣을  필요없이  css에서 여기에"   "들어갈 css만 복사 붙여 넣기만 해주면된다 
 -  const clickedClass = "  css  " ;
 
-## 3.8 (toggle)
+## 3.8 (classList.add_toggle)
 
 ```js
 const title = document.querySelector("div.hey h1:first-child");
@@ -912,11 +910,479 @@ classList : https://developer.mozilla.org/ko/docs/Web/API/Element/classList
 
 
 
+## 4.0 (input)
+
+1. 우선 우리는 user에게 질문을 해야되다 , 이름이 무엇인지
+2. 그정보를 어떻게 받을지 정하기
+3. 그정보를 화면에 표시하기
+4. js에는 사실 value를 기억하게 하는 쉬운 방법이있음(user의 이름을 기억하는것처럼)
+
+```js
+const loginform = document.getElementById("login-form");
+```
+
+- querySelector()을 사용할때는 대상이 무엇인지 알려줘야함 왜냐 classname,tagname모두 검색이 가능하기때문 ex) querySelector("#login-form")
+
+```js
+const loginInput = loginform.querySelector("input");
+```
+
+- loginInput이라고 이름을 지어주고  그전에 정해준 이름 loginform. 에서 querySelector으로 HTML에 있는  input을 선택한다는 뜻
+
+**user가 이button을 클릭할때 감지하는 방법**
+
+```js
+const loginButton = loginform.querySelector("button");
+
+function onLoginBtnClick() {}
+loginButton.addEventListener("click", onLoginBtnClick);
+```
+
+- input에 적은 내용을 console.log()하는법(추후에 value를 저장할수있도록)-clikck event 사용하기 
+- 그래서 click event는 logButton과 연결되어야함
+
+input의 내용을 가져오려면 "value" property를 찾아야함
+
+```js
+function onLoginBtnClick() {
+  console.log("hello", loginInput.value);
+}
+loginButton.addEventListener("click", onLoginBtnClick);
+```
+
+- loginInput에 있는 property 중에 value 값만 가져오는 방법  (loginInput.value)
+- "hello" 을 작성하면 값 앞에 붙어 같이 나옴
+
+## 4.1 (form submission)
+
+**if/else**
+
+```js
+function onLoginBtnClick() {
+  const username = loginInput.value;
+  if (username === "") {
+    alert("please write your name");
+  }
+```
+
+- loginInput.value 값을 username 이라고 정의해주기 그리고 그값이 만약 공백이면 알림이 나오게 하기
+
+```js
+function onLoginBtnClick() {
+  const username = loginInput.value;
+  if (username === "") {
+    alert("please write your name");
+  } else if (username.length > 15) {
+    alert("you are name is too long");
+  }
+}
+loginButton.addEventListener("click", onLoginBtnClick);
+```
+
+- username.length으로 string길이를 구할수있다
+
+**HTMl에서 최대 글자수 조정하는 방법** 
+
+```html
+<input
+        required
+        maxlength="15"
+        type="text"
+        placeholder="what is your name?"
+      />
+```
+
+-  required 으로 최대글자 길이를 15로 요구할수있다 
+
+```html
+ <form id="login-form">
+      <input
+        required
+        maxlength="15"
+        type="text"
+        placeholder="what is your name?"
+      />
+      <button>Log In</button>
+    </form>
+```
+
+- form안에서 작업을 안해주면 확인작업이 안된다
+
+- input의 유효성 검사를 작동하기위해서는 form태그를 활용해야된다,그래서 input은 form안에 있어야된다
+
+```js
+function onLoginBtnClick() {
+  const username = loginInput.value;
+  console.log(username);
+}
+loginButton.addEventListener("click", onLoginBtnClick);
+```
+
+- js에서  console.log(username) 인만 해줘도 html이 알아서 글자수가 15넘으면 더이상입력  할수없게하고
+
+ 	공백인 경우에는 입력하라는 메세지를 띄워준다 (이렇게 하는 방법이 더좋다)
+
+- html만으로도 input에 입력하고 bottn을 누르면 자동으로 submit이 되어 새로고침이된다
+
+## 4.2 (events1)
+
+**event "submit"**
+
+```js
+function onLoginSubmit() {
+  const username = loginInput.value;
+  console.log(username);
+}
+loginform.addEventListener("submit", onLoginSubmit);
+```
+
+- form을 submit 할때 입력값을 받아낸다
+
+- 여기서 새로고침이 일어나는건 form submit의 기본동작이라 아직 새로고침이된다
+
+()을 더하면 브라우저가 보자마자 자동으로 function을 실행시켜버림
+
+```js
+function onLoginSubmit(tomato) {
+  tomato.preventDefault();
+  console.log(tomato);
+}
+loginform.addEventListener("submit", onLoginSubmit);
+```
+
+- onLoginSubmit이라는 function을 만들고 ,function이 하나의 argument를 받도록 한다
+- 우리는 argument공간만 제공하면된다 ,그러면 첫번째로 실행된 event에 대한 정보를 지닌 argument를 채워보여준다  console.log(tomato);
+-  preventDefault()이라는 function은 event의 기본 행동이 발생하지않도록 막는것임
+
+**event. preventDefault()**
+
+```js
+const loginform = document.getElementById("login-form");
+const loginInput = loginform.querySelector("input");
+
+function onLoginSubmit(event) {
+  event.preventDefault();
+  console.log(loginInput.value);
+}
+loginform.addEventListener("submit", onLoginSubmit);
+```
+
+- submit event가 발생할때는 js는 onLoginSubmit을 호출하고 이때 event object를 argument로 주고
+
+`function onLoginSubmit(event)`
+
+- 그리고 나서 기본동작이 실행되는 걸 막아준다  `event.preventDefault();`
+
+## 4.3 (events2 )
+
+```js
+const link = document.querySelector("a");
+function handleLinkClick(event) {
+  event.preventDefault();
+  console.log(event);
+}
+link.addEventListener("click", handleLinkClick);
+```
+
+- 링크의 기본동작은 클릭시 다른 페이지로 이동
+
+- 브라우저가 하려고 하는 동작을 허용하지 않고 막아버림  `event.preventDefault();`
+
+- addEventListener안에 있는 함수는 직접 실행하지 않는다 브라우저가 해주기 때문에 
+
+  브라우저는 event에 대한 정보를 담아 실해 시켜준다 그래서 우리는 자리만 만들어 주면되고 그안에는 함수가 있다   `function handleLinkClick(event) {` `event.preventDefault();` }`
+
+## 4.4 (get username) classList
+
+```js
+function onLoginSubmit(event) {
+  event.preventDefault();
+  loginForm.classList.add("hidden");
+  const username = loginInput.value;
+  greeting.innerText = "Hello " + username;
+  greeting.classList.remove("hidden");
+}
+```
+
+- 유저가 form을 통해 제출했을때, 기본동작은 막아주고 
+
+- hidden 이라는 class name을 더해줘서 html에 form을 숨기고
+- 유저의 이름을 변수로 저장해주고 그이름은 h1 안에 넣어준다
+
+**js에서 반복되는 clssname 저장할때는 대문자로 표기한다**
+
+```js
+const HIDDEN_CLASSNAME = "hidden";
+```
+
+- 일반적으로 string만 포함된 변수를 저장할때는 대문자로 표기한다
+
+**저장한 clasname으로 classList에 넣어주기**
+
+```js
+const HIDDEN_CLASSNAME = "hidden";
+
+function onLoginSubmit(event) {
+  event.preventDefault();
+  loginForm.classList.add(HIDDEN_CLASSNAME);
+  const username = loginInput.value;
+  greeting.innerText = "Hello " + username;
+  greeting.classList.remove(HIDDEN_CLASSNAME);
+}
+```
+
+- `loginForm.classList.add(HIDDEN_CLASSNAME);`
+
+**"Hello " + username을 대체할 방법**
+
+```js
+ greeting.innerText = "Hello " + username;
+ greeting.innerText = `Hello ${username}`;    <---이방법을 더 선호한다 
+```
+
+- 둘다 같은 뜻이다 
+
+- Hello 다음에 한칸 띄우고 username변수의 값을 표시해준다 
+- 밑에 코드는 두가지 규칙이 있다  -  `greeting.innerText = Hello ${username};`
+  - 변수와 string을 결합하거나 변수를 string안에 집어넣고 싶다면 `${변수명}` 이렇게 표현하면 된다 
+  - ``(백틱) 이기호로 시작해야된다
+
+## 4.5 (save username) local storage
+
+**localStorage**
+
+```js
+ localStorage.setItem(key", "value");
+ localStorage.getItem("key");
+ localStorage.removeItem("key");
+```
+
+- 브라우저에 뭔가를 저장할수 있게 해준다 그래서 나중에 가져다가 쓸수 있게 해줌
+
+  F12를 하고 application에서 localstorage를 볼수있다 
+
+```js
+ const username = loginInput.value;
+localStorage.setItem("username", "username");
+```
+
+- 첫번쩨 username은 저장될 아이템의 이름이고 두번째 값은 username의 변수이다
+
+```js
+function onLoginSubmit(event) {
+  event.preventDefault();
+  loginForm.classList.add(HIDDEN_CLASSNAME);
+  const username = loginInput.value;
+  localStorage.setItem("username", username);
+  greeting.innerText = `Hello ${username}`;
+  greeting.classList.remove(HIDDEN_CLASSNAME);
+}
+```
+
+-  `localStorage.setItem("username", username)` 순서가 바뀌면 작동하지않음
+
+## 4.6 (if/else)
+
+- local storage 가 비어있으면 form 부터 보여주면서 지금까지 해오던걸하면되고
+
+- local storage에 유저정보가 있으면 form을 보여주면 안된다 h1요소를 보여줘야된다
+
+**문자열이 반복되는 경우는 const를 해준다** 
+
+```
+const USERNAME_KEY = "username";
+localStorage.setItem(USERNAME_KEY, username);
+```
+
+if/else
+
+```js
+const savedUsername = localStorage.getItem(USERNAME_KEY);
+if (savedUsername === null) {
+  loginForm.classList.remove(HIDDEN_CLASSNAME);
+  loginForm.addEventListener("submit", onLoginSubmit);
+} else {
+  greeting.innerText = `Hello ${savedUsername}`;
+  greeting.classList.remove(HIDDEN_CLASSNAME);
+}
+```
+
+- greeting에게 글자를 추가해주고 clssname을 제거해줘야된다
+
+**반복되는 작업을 함수로 만드는 방법**
+
+```js
+function paintGreeting(username) {
+  greeting.innerText = `Hello ${username}`;
+  greeting.classList.remove(HIDDEN_CLASSNAME);
+}
+
+else {
+  paintGreeting(savedUsername);
+}
+paintGreeting(username);
+```
+
+- 각각 인자로 savedUsername와 username을 넣어준다
+- 우리가 함수를 호출하는  위치에  따라 유저정보는 다른 곳에서 오게된다
+
+- `paintGreeting(username)` 는 `function 함수이름(argument)` 이 순서대로 작성해야된다 
+
+  그리고 argument는 이전에 정의한 변수명과는 아무 상관이 없다. 전에`username`을 썼다고 해서 위에서 정의한 `const username`이 들어가는 것이 아니다
+
+- 함수 뒤의 (괄호) 안에 들어가는 것은 그 함수 안에서 사용할 변수의 이름을 임의로 지어주는 것 뿐이다.
 
 
 
+## 5.0 (setInterval)
+
+**interval는 매번 일어나야하는 무언가를 뜻함**
+
+```js
+const clock = document.querySelector("h2#clock");
+function sayHello() {
+  console.log("Hello");
+}
+setInterval(sayHello, 5000);
+```
+
+- setInterval는 두개의 argument를 받는다
+
+- 첫번째는 실행하고자 하는 function이고 두번째는 호출되는 function의 간격을말함(ms초단위) 5000ms=5초
+
+## 5.1 (setTimeout)
+
+```js
+const clock = document.querySelector("h2#clock");
+function sayHello() {
+  console.log("Hello");
+}
+setTimeout(sayHello,5000)
+```
+
+- 첫번째는 실행하고자 하는 function이고 두번째는 호출되는 function을 얼마나 기다릴지 넣기 
+
+  그래서 바로 시작하지않고 5초를 기다리고 실행한다 (ms초단위) 5000ms=5초 
+
+```js
+const clock = document.querySelector("h2#clock");
+function getClick() {
+  const date = new Date();
+  console.log(`${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`);
+}
+setInterval(getClick, 1000);
+```
+
+- 매초마다 새로운 Date object를 만든다 `date.getHours()`, `date.getMinutes()`,`date.getSeconds()`
+
+- new Date(); object는 현재날짜, 현재시간,분,초 에대한 정보를 가지고 있고
+
+```js
+getClick();
+setInterval(getClick, 1000);
+```
+
+- 1초를 기다리지않고 바로 website가 load 되자마자 getClock()을 실행하고 또 매초마다 다시 실행되도록 한다 
+
+- `getClick();`즉시 호출한다는 뜻 그리고 매초마다 `setInterval(getClick, 1000);`을 실행한다
+
+```js
+function getClick() {
+  const date = new Date();
+  clock.innerText = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
+```
+
+`clock.innerText=`으로 clock안에 집어넣는다는 뜻
+
+## 5.2 (padStart)
+
+- `padStart()`는 string에 쓸수 있는 function이다 
+
+- 길이다 1인문자가 있으면 padStart()으로 string의 시작 부분에 padding을 추가해달라고한다
+
+ 	 길이가 2는 되어야한다 만약 길이가 2가 안되면 앞쪽에 0을 추가한다 
+
+- padEnd()라는것도 있다 그반대 개념이다
+
+- ex) "hello".padStart(10,"x")    ----> xxxxxhello
+
+```js
+function getClick() {
+  const date = new Date();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  clock.innerText = `${hours}:${minutes}:${seconds}`;
+}
+```
+
+- date.getHours()엔 padStart()를 쓸수 없다 그래서 String안에는 쓸수있기때문에 String안으로 date를 넣어준다
+
+## 5.3 정리
+
+1. getClick이라는 function을 만들었고 Date라는 object를 생성했다 Date라는 object는 이걸호출하는 당시의 현재 날자와 시간을 알려준다 
+2. `date.getHours()/date.getMinutes()/date.getSeconds()`을 String으로 감싸줘서 숫자를 문자열로 바꿔주었음
+3. `.padStart(2, "0")` 을 그뒤에 추가할수있었음
+4. 구한 시간을 clock의innerText로 넣어줌
+5. `getClick()`만 작성하면 한번만 일어나고 끝나고 작동하지않는다 시계가
+6. 대신에 `setInterval(getClick, 1000)`을 작성하면  매 1초마다 실행이 된다
+   - setInterval은 정한시간마다 function을 실행시켜준다 / 1000ms(1초)
 
 
+
+## 6.0 (random)
+
+**Array 가져오는방법**
+
+Array는 각 object들을 (,)콤마로 구분 마지막 object에게도  (,)콤마 해야된다
+
+이 object들은 string으로 된 명언을 가지고 있다 string뒤에도 모두 콤마를 해준다
+
+```js
+console.log(quotes[1]);
+```
+
+- 첫번째 element를 가져올때는 1이아니라 0을 써야한다
+
+``` js
+console.log(quotes[10 - 1]);
+```
+
+- 마지막 element를 가져오기 위해서는 숫자를 세어보고 -1을 해줘야한다 왜냐 컴뷰터는 0부터 읽기 때문이다
+
+**random**
+
+Math module중 random()이라는 function을 가지고 있다 `Math.random()`
+
+random()은 0~1사이의 랜덤한 숫자를 제공해 준다
+
+```js
+console.log(quotes[Math.floor(Math.randow() * 10)]);
+```
+
+- Math.random()에 10을 곱하면 0~10사이의 숫자들을 얻을수있다   `Math.random()*10`
+
+- 나오는 값들이 소수점을 가지는 float이다 그것들을 없애기위해서는 세가지 function을 쓸수있다
+
+- Math.round() = 반올림 / Math.ceil() =  소수점이 있으면 무조건 반올림해준다 / Math.floor() = 내림
+
+**직접 Array의  갯수를 세어보지않고도 길이 아는법**
+
+```js
+const todaysQuote = quotes[Math.floor(Math.random() * quotes.length)];
+```
+
+- `* quotes.length` quotes의 길이만큼 곱한다
+
+```js
+quote.innerText = todaysQuote.quote;
+author.innerText = todaysQuote.author;
+```
+
+- todaysQuote는 quotes 이다 그안에는 quote와author둘다 있기 때문에  todaysQuote.quote이렇게 각각
+
+ 선언해줘야한다
 
 
 
