@@ -1340,7 +1340,7 @@ Array는 각 object들을 (,)콤마로 구분 마지막 object에게도  (,)콤�
 이 object들은 string으로 된 명언을 가지고 있다 string뒤에도 모두 콤마를 해준다
 
 ```js
-console.log(quotes[1]);
+console.log(quotes[0]);
 ```
 
 - 첫번째 element를 가져올때는 1이아니라 0을 써야한다
@@ -1384,13 +1384,63 @@ author.innerText = todaysQuote.author;
 
  선언해줘야한다
 
+## 6.1 (createElement)
 
+**js에서 이미지를 만들고 이걸 html에 추가하기**
 
+```js
+const bgImage = document.createElement("img");
+bgImage.src = `img/${chosenImage}`;
+```
 
+- img라는 element를 생성하기,html에서 직접 img태그를 만들어주지않아도 js에서 만들수있다
 
+**bgimage 를 body내부에 추가하기**
 
+```js
+document.body.appendChild(bgImage);
+```
 
+- appendChild은 body에 html 이미지를 추가한다
+- 맨밑에 추가가 된다  (append는 뒤에 prepend는 가장 위에 첨부할수있다) 
 
+**insertBefore()**
+
+```js
+document.body.insertBefore(bgImage, h2);
+```
+
+- 이 메소드는 참조된 노드 앞에 특정 부모 노드의 자식 노드를 삽입합니다.
+
+- 두개의 인자중에 앞의 bgImage는 새로운 노드 즉 추가하고 싶은 노드이고 h2는 참조할 노드입니다
+
+  즉  h2요소 앞에 bgImage가 추가된다
+
+## 6.2 정리
+
+```js
+const images = ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"];
+const chosenImage = images[Math.floor(Math.random() * images.length)];
+const bgImage = document.createElement("img");
+bgImage.src = `img/${chosenImage}`;
+console.log(bgImage);
+document.body.appendChild(bgImage);
+```
+
+- 먼저 array를 통해서 랜덤으로 이미지를 골라내는 걸만들기
+  - `Math.random()`은 랜덤한 숫자를 가져다준다 (기본은 0~1사이의 숫자만 가져온다 소수점 포함)
+  - 그래서 `Math.random()`에다가 `images.length`으로 images array 길이만큼 곱해준다 그러면 포함된 길이만큼 랜덤 숫자가 나온다 (0~3)
+  - `Math.floor()`는 랜덤으로 나오는 array 숫자들의 소수점을 제거하고 내림 해준다 
+
+- js에서 이미지태그를 추가한다
+
+  - `createElement("img")`으로 html img 태그를 추가한다 (img이름을 bgimage로 정의함)
+
+  - 이미지태그인 bgimage를 선택하고 src로 img폴더 뒤에 chosenImage을추가한다
+
+    `bgImage.src = img/${chosenImage}`
+
+  - 마지막으로 bgimage를 body에 첨부하면된다 `document.body.appendChild(bgImage)`
 
 
 
