@@ -1442,6 +1442,246 @@ document.body.appendChild(bgImage);
 
   - 마지막으로 bgimage를 body에 첨부하면된다 `document.body.appendChild(bgImage)`
 
+## 7.0 (submit)
+
+**form을 제출해도 새로고침안되게 하는방법**
+
+```js
+function handleToDoSubmit(event) {
+  event.preventDefault();
+}
+toDoForm.addEventListener("submit", handleToDoSubmit);
+```
+
+**id가  todo-form안에서 input을 찾아내는 방법**
+
+```js
+const toDoForm = document.getElementById("todo-form");
+const toDoInput = toDoForm.querySelector("input");
+```
+
+`const toDoInput = toDoForm.querySelector("input");`
+
+`const toDoInput = document.querySelector("#todo-form input");`  둘다 같은 말이다 
+
+**input의 값이 enter누르면 공백이 되게 하기** 
+
+```js
+toDoInput.value = ""
+```
+
+**input값이 공백이되기전에 바로위에 값을 newToDo라고 선언해주기 ( input값을저장하기위해)**
+
+```js
+const newToDo = toDoInput.value;
+toDoInput.value = "";
+```
+
+- toDoInput.value 가 마지막에 비워졌다 해서  newToDo가 비워지는 것이아니고
+
+- toDoInput.value를 새로운 변수에 복사하는 것이다 그래서 값이 없어지지않는다
+
+```js
+const toDoForm = document.getElementById("todo-form");
+const toDoInput = toDoForm.querySelector("input");
+const toDoList = document.getElementById("todo-list");
+
+function handleToDoSubmit(event) {
+  event.preventDefault();
+  const newToDo = toDoInput.value;
+  toDoInput.value = "";
+}
+toDoForm.addEventListener("submit", handleToDoSubmit);
+```
+
+## 7.1 (appendChild) *
+
+**handleToDoSubmit 함수가 paintToDo 함수를 사용하게  하기**
+
+```js
+function paintToDo(newToDo) {
+  console.log("i will paint", newToDo);
+}
+
+function handleToDoSubmit(event) {
+  event.preventDefault();
+  const newToDo = toDoInput.value;
+  toDoInput.value = "";
+  paintToDo(newToDo);
+}
+```
+
+- handleToDoSubmit함수에   `paintToDo(newToDo);`추가해서 이기능으로 넘어가게 하기
+
+- `function paintToDo(newToDo)` 은 handleSubmit 함수 안에서 선언된 newTodo값을  paintTodo 함수안에 집어넣고 그 안에서 paintTodo함수를 실행한다 의미
+
+**js  li태그 만들기**
+
+```js
+ const li = document.createElement("li");
+```
+
+- 변수명을 꼭 태그명으로 안해도되지만 똑같이 하면 보기 쉽기때문
+
+**js에서 li태그안에 span태그 넣기**
+
+```js
+li.appendChild(span);
+```
+
+**span 안의 텍스트는 newToDo변수가된다**
+
+```js
+  span.innerText = newToDo;
+```
+
+## 7.2 (event)
+
+**버튼을 추가하고 버튼에 클릭하면 리스트가 삭제되는 이벤트주기**
+
+```js
+const button = document.createElement("button");
+button.innerText = "X";
+button.addEventListener("click", deletToDo);
+```
+
+- event라고 적어주면 어떤 리스트를 삭제했는지 볼수있다  
+
+```js
+function deletToDo(event) {
+ console.log(event.target.parentElement);
+}
+-------li이라고 정의하기 
+function deletToDo(event) {
+  const li = event.target.parentElement;
+  li.remove();
+}
+```
+
+-  `console.log(event.target.parentElement);`
+
+- target은 클릭된 html element 이다, parentElement은 target의  부모인 li태그이다 
+
+- function은 중괄호 '{ }'로 구분을 하죠. 따라서 하나의 지역으로 정의를 내릴 수 있으며 한 지역 내에 정의된 변수는 그 지역에서만 정의됩니다.
+
+- `li.remove();` li태그 삭제하기
+
+## 7.3 ( JSON.stringify)
+
+브라우저에 리스트 저장하기
+
+**array 만들기**
+
+```js
+const toDos = [];
+```
+
+- newToDo가 작성될때 마다 텍스트들을 array 에 push하기 
+
+```js
+function handleToDoSubmit(event) {
+  event.preventDefault();
+  const newToDo = toDoInput.value;
+  toDoInput.value = "";
+  toDos.push(newToDo);
+  paintToDo(newToDo);
+}
+```
+
+- paintToDo하기 전에 array하기
+
+**painToDo한거 localStorage에 저장하기**
+
+```
+function saveToDos() {
+  localStorage.setItem("todos", toDos);
+}
+```
+
+- localStorage는 array를저장할수없다 오직 텍스트로만 저장가능하다
+
+ **`JSON.stringify( )`는 string(문자열)으로 바꿔준다**
+
+```js
+function saveToDos() {
+  localStorage.setItem("todos", JSON.stringify(toDos));
+}
+```
+
+- `array`형태인 toDos를 `JSON.stringify`으로  문자열로 변경하여 `localStorage`에 저장함
+- [1,2,3] ---> "[1,2,3] "
+
+## 7.4 (JSON.parse)
+
+ **JSON.parse()**
+
+```
+const parsedToDos = JSON.parse(savedToDos)
+```
+
+- 단순한 문자열을 js가 이해할수있게 무언가 할수있는  array로 만들기
+
+```js
+function sayHello(item) {
+  console.log("This is the turn of", item);
+}
+
+const savedToDos = localStorage.getItem(TODOS_KEY);
+if (savedToDos !== null) {
+  const parsedToDos = JSON.parse(savedToDos);
+  parsedToDos.forEach(sayHello);
+}
+```
+
+- js는 array에 있는 각각의 item에 대해 function을 실행시킬수있다 `forEach()`
+
+  그래서 forEach가 각각의 item에 대해 sayHello를 실행 시킨다
+
+-  parsedToDos가 이제 array가 되었기 때문에 forEach를 할수있다 
+- arrow function 화살표 함수로도 표현 가능
+
+```js
+ parsedToDos.forEach((item) => console.log("This is the turn of", item));
+```
+
+- function을 따로만들지 않고 사용하기 의미는 똑같다 위에랑
+
+결론:local storage에 array로 저장이 안되기 때문에 JSON.stringify로 array처럼 생긴 string으로 저장한 후 
+
+다시 JSON.parse 이용해 array로 꺼내는 방법이다
+
+## 7.5 정리
+
+```js
+ parsedToDos.forEach(paintToDo);
+```
+
+- 리스트를 화면에 나타낼수 있는 'paintToDo'함수가 이미 있기때문에 이함수를 사용하면된다
+- 각가 배열된 리스들에게 paintToDo함수를 적용시킨것이다
+
+문제는 새로고침을하면 localStorage에 처음 적은거는 저장이안되고 새로 적은것만 저장되어있다
+
+왜냐면 `const toDos = [];`가 그전 리스트는 없고  비어있기 때문에 새로운 리스트만 계속 저장되기때문이다 
+
+그래서 예전거와 지금적은거 모두 저장해야된다 
+
+그러기 위해서느 let으로 바꿔서 업데이트가 가능하도록 만들어야된다  `let toDos = [];`
+
+ `toDos = parsedToDos;`  그리고 toDos에게 parsedToDos을 준다
+
+```js
+let toDos = [];
+
+const savedToDos = localStorage.getItem(TODOS_KEY);
+if (savedToDos !== null) {
+  const parsedToDos = JSON.parse(savedToDos);
+  toDos = parsedToDos;
+  parsedToDos.forEach(paintToDo);
+}
+```
+
+## 7.6
+
 
 
 
