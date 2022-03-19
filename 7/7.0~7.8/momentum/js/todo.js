@@ -15,12 +15,15 @@ function saveToDos() {
 function deletToDo(event) {
   const li = event.target.parentElement;
   li.remove();
+  toDos =toDos.filter((todo) => todo.id !== parseInt(li.id));
+  saveToDos()
 }
 // newToDo만들어지는 함수
 function paintToDo(newToDo) {
   const li = document.createElement("li");
+  li.id=newToDo.id;
   const span = document.createElement("span");
-  span.innerText = newToDo;
+  span.innerText = newToDo.text;
   const button = document.createElement("button");
   button.innerText = "X";
   button.addEventListener("click", deletToDo);
@@ -33,8 +36,12 @@ function handleToDoSubmit(event) {
   event.preventDefault();
   const newToDo = toDoInput.value;
   toDoInput.value = "";
-  toDos.push(newToDo);
-  paintToDo(newToDo);
+  const newToDoObj={
+    text:newToDo,
+    id:Date.now()
+  }
+  toDos.push(newToDoObj);
+  paintToDo(newToDoObj);
   saveToDos();
 }
 toDoForm.addEventListener("submit", handleToDoSubmit);
@@ -46,4 +53,9 @@ if (savedToDos !== null) {
   toDos = parsedToDos;
   //   각배열에게 함수를 실행시켜준다
   parsedToDos.forEach(paintToDo);
+}
+
+// 삭제 버튼 누르면 array object를 localstorage에서 삭제하기 
+function filter(){
+
 }

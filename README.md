@@ -1676,29 +1676,110 @@ const savedToDos = localStorage.getItem(TODOS_KEY);
 if (savedToDos !== null) {
   const parsedToDos = JSON.parse(savedToDos);
   toDos = parsedToDos;
-  parsedToDos.forEach(paintToDo);
+  parsedToDos.forEach(paintToDo); 
+    
 }
 ```
 
 ## 7.6
 
+아직ToDo 를 지울때마다 local storage가 업데이트가 안되서 되게만들어야됨
+
+그래서 array마다 id를 주기 ( text를 받지않고 object 를 받는다)
+
+```js
+const newToDoObj={
+    text:newToDo,
+    id:Date.now()
+  }
+  toDos.push(newToDoObj);
+  paintToDo(newToDoObj);
+  saveToDos();
+}
+```
+
+- newToDoObj변수를 toDos.push에 넣어주기 
+
+```js
+ span.innerText = newToDo.text;
+```
+
+object로 받았기때문에 뒤에 .text라 해줘야 글자만 보임
+
+## 7.7
+
+ array의 item을 유지하고 싶으면 필터 함수는 반드시 true해야된다
+
+만약 false하면 새array가 포함되지않는다
 
 
 
+## 7.8
 
+```js
+toDos =toDos.filter((todo) => todo.id !== parseInt(li.id));
+```
 
+- 클릭한 li.id와 다른 toDo는 남겨둔다는 의미 
 
+- `parseInt()` 문자열을 숫자로 바꿔줌
 
+## 8.0
 
+```js
+navigator.geolocation.getCurrentPosition()
+```
 
+- 브라우저에서 위치 좌표를 준다 (wifi,위치,GPS..)
 
+- `getCurrentPosition()` 은 argument 기 2개 필요하다
 
+  - 하나는 모든게 잘됐을대 실행되는 함수,에러가 발생했을대 실행될 함수
 
+  - ```js
+    function onGeoOk(){
+    }
+    function onGeoError(){
+    }
+    navigator.geolocation.getCurrentPosition(onGeoOk,onGeoError);
+    ```
 
+  ```js
+  function onGeoOk(position){
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      console.log("You live it" ,lat ,lng);
+  }
+  function onGeoError(){
+      alert("Can't find you. No weather forr you.");
+  }
+  
+  navigator.geolocation.getCurrentPosition(onGeoOk,onGeoError);
+  ```
 
+- 경도와 위도를 불러옴
 
+## 8.1
 
+wetube
 
+https://openweatherap.org/ 
 
+JSON Viewer :크롬 확장프로그램 (정리되서 보임)
 
+https://api.openweathermap.org/data/2.5/weather?lat=35.8727076&lon=128.6424869&appid=d528e04941f2c0a6346e994bb29619b3
+
+나의 위치 날씨보여줌
+
+**js에서 url불러오기**
+
+```js
+ const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${log}&appid=${API_KEY}`;
+```
+
+- lat값과 log값과 API_KEY값이 위에 변수로 있어야됨
+
+ **fetch(url)**
+
+- 실제로 url을 클릭할 필요없이 js가 대신 url을 불러준다
 
